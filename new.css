@@ -1,0 +1,123 @@
+body, html { height:100%; padding:0; margin:0;}
+
+
+textarea {
+    width: 300px;
+    height: 40px;
+    vertical-align: middle;
+    resize: vertical;
+}
+
+input {
+    width: 60px;
+    height: 40px;
+    vertical-align:middle;
+}
+
+.downside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 100%;
+  background-color: #FCEFCA;
+  overflow:scroll;
+  font-weight:bold;
+}
+
+.side {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 130px;
+  height: 100%;
+  background-color: #FCEFCA;
+  overflow:scroll;
+  font-weight:bold;
+  padding: 1em;
+  border-style: solid;
+}
+
+.header {
+  top: 0;
+  height: 50;
+  background-color: #FCEFCA;  
+  text-align: center;
+  font-size: 130%;
+  font-weight:bold;
+  color: firebrick;
+  border-style: solid;
+  #padding: 10px,10px,10,10;
+}
+
+
+.upper, .lower {
+  position: absolute;
+  top: 50;
+  bottom: 0;
+  border-style: solid; 
+  background-color:  #FCEFCA;
+  
+}
+
+.lower {
+  left: 130px;
+  width: 460px;
+  padding: 1em;
+  overflow:scroll;
+  
+}
+.upper {
+  color: firebrick;
+  #width: 40%;
+  left: 622px;  
+  right: 165px;
+  border-style: solid; 
+}
+
+.example{
+  padding-left:50px;
+  font-size: smaller;
+  font-style: italic;
+}
+
+
+a:visited {
+  color:firebrick;
+
+}
+
+a:hover {
+          background-color:firebrick;
+          color:lightyellow;
+          text-decoration: none;
+}
+
+
+.word { 
+	border-right: thin solid;
+	border-bottom: thin solid;
+}
+
+h2 {margin: 0 auto;
+    text-align: center;}
+
+hr { 
+	display: none 
+}
+
+.lemma { 
+	font-size: 13px; 
+}
+
+.form { 
+	font-style: italic; 
+}
+
+a.letter {
+	font-weight: bold;
+}
+
+a {
+	text-decoration: none;
+}
