@@ -27,49 +27,43 @@
 		 print("Error");	 
 	  };       
 
-	 //Getting the current verb and current noun
-	 if ( isset($_GET['verb'])) {
-		 $_SESSION['verb'] = $_GET['verb'];
-		 // Need to reset the verbs frame and choose the first one as current
-		 $frames = $verb_to_noun[$_SESSION['verb']]["frames"]; 
-		 reset($frames);
-		 $_SESSION['frame'] = $frames[key($frames)];
-		 // Need to reset the noun frame (however keep it if it is there too
-		 //TODO: nechat to tam stejne slovo, pokud je tam pro dane slovo
-		 $nouns = $verb_to_noun[$_SESSION['verb']]["nouns"]; 
-		 reset($nouns);
-		 $_SESSION['noun'] = $nouns[key($nouns)];
-		 $verb_valency = $verb_to_noun[$_SESSION['verb']]["valency"];
-	  };
-
-	  if(empty($_SESSION['verb'])) {
-		$_SESSION['verb'] = "mit";
+	$reload = false;
+	// setting up the verb session
+	if (isset($_GET['verb'])) {$_SESSION['verb'] = $_GET['verb'];}
+	else {
+		$_SESSION['verb'] = "mit"; 
+		$reload = true;
+	}
+	// setting up the noun session
+	if  (isset($_GET['noun'])) {$_SESSION['noun'] = $_GET['noun'];}
+	else {
+		$nouns = $verb_to_noun[$_SESSION['verb']]["nouns"]; 
+		reset($nouns);
+		$_SESSION['noun'] = $nouns[key($nouns)];	
+		$reload = true;
+	}
+	// setting up the frame session
+	if (isset($_GET['frame'])) {$_SESSION['frame'] = $_GET['frame'];}
+	else {
 		$frames = $verb_to_noun[$_SESSION['verb']]["frames"]; 
 		reset($frames);
 		$_SESSION['frame'] = $frames[key($frames)];
 		$verb_valency = $verb_to_noun[$_SESSION['verb']]["valency"]; 
-	  };
-	  
-	  //Getting the current noun
-	  if ( isset($_GET['noun'])) {
-		 $_SESSION['noun'] = $_GET['noun'];
-	  };
-
-	if(empty($_SESSION['noun'])) {
-		$nouns = $verb_to_noun[$_SESSION['verb']]["nouns"]; 
-		reset($nouns);
-		$_SESSION['noun'] = $nouns[key($nouns)];
-	};
-	  
+		$reload = true;
+	}
+	if ($reload) {
+		header("Location:index.php?noun={$_SESSION['noun']}&verb={$_SESSION['verb']}&frame={$_SESSION['frame']}");
+		die();
+	}
+		
 	//Getting the valency data for noun in PDT-Vallex
 	if (isset($noun_valency[$_SESSION['noun']])) {
 		$noun_data = $noun_valency[$_SESSION['noun']];
 	} else {
 		$noun_data = Null;
-	}	
-	  
-	  
-	 //Getting the results
+	}
+	
+	//Getting the results
 	 $filename = "results.json";
 
 	if(file_exists($filename)) {
@@ -87,12 +81,11 @@
 
 	//Changing the frame, i.e. upper part of the screen
 	$frames = $verb_to_noun[$_SESSION['verb']]["frames"]; 
-	if (isset($_GET['frame'])) {
-		 $_SESSION['frame'] = $_GET['frame'];
-	};
+	//if (isset($_GET['frame'])) {
+		 //$_SESSION['frame'] = $_GET['frame'];
+	//};
 	$verb_valency = $verb_to_noun[$_SESSION['verb']]["valency"]; 
 	$nouns = $verb_to_noun[$_SESSION['verb']]["nouns"];
-	$ypos = $_COOKIE["ypos"];
 	?>
 	 
 	  
@@ -104,34 +97,30 @@
 	</div>
 	<div class = "downside">
 		<?php foreach($nouns as $noun) {
-			print "<p><a href='index.php?noun={$noun}'>{$noun}</a></p>";
+			print "<p><a href='index.php?noun={$noun}&verb={$_SESSION['verb']}&frame={$_SESSION['frame']}'>{$noun}</a></p>";
 			}
 		?>
 	</div>	
 	<div class = "header">  
 		<?php 
 			foreach ($frames as $key => $val) {
-				print "<a href=\"index.php?frame={$val}\">{$key}</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+				print "<a href=\"index.php?frame={$val}&noun={$_SESSION['noun']}&verb={$_SESSION['verb']}\">{$key}</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			};
 		?>
 	</div>
 
 	<div class="upper">
 		<object type="text/html" data="<?php echo "http://ufal.mff.cuni.cz/vallex/2.6.3/data/html/generated/lexeme-entries/{$_SESSION['frame']}.html"?>"
-			style="width:100%;height:100%; margin:0%;" > <!--style="width:100%; height:100%; margin:0%;">-->
+			style="width:100%;height:100%; margin:0%;" >
 		</object>
 	</div>
 	
 	<div class="lower">
-		<?php
-		#var_dump($results);
-		#var_dump($noun_data);
-		?>
-		
+
 		<!--lemma-->
 		<h2><?php echo "{$_SESSION['noun']}"; ?></h2><br>
 		<!--choosing the verb valency frame-->
-		<form action="save.php?" method="post">
+		<form action="save.php?<?php echo "noun={$_SESSION['noun']}&verb={$_SESSION['verb']}&frame={$_SESSION['frame']}"?>" method="post">
 		<p style='text-align: center;'>Valency frame<br><select name="valency">
 			<?php foreach($verb_valency as $val) {
 				print  "  <option value=\"{$val}\"";
